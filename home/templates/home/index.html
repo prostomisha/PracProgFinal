@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NewsPortal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+
+    <style type="text/css">
+        a {
+            text-align: center;
+        }
+        li {
+            text-align: center;
+            list-style-type: none;
+        }
+        nav {
+            text-align: center;
+        }
+        p {
+             text-align: center;
+        }
+        .cat {
+            color: chocolate;
+        }
+
+    </style>
+</head>
+<body>
+<nav>
+    {% load account %}
+    {% user_display user as u %}
+    {% if u %}
+        <p>{% user_display user %}</p>
+        <a href="../accounts/logout/">Log out</a>
+    {% else %}
+        <p>Not logged in</p>
+        <a href="../accounts/login/">Log in</a>
+    {% endif %}
+</nav>
+
+{% if u == 'root' %}
+    <h1><a href="create/">Create new Post</a></h1>
+{% endif %}
+
+
+<p>All {{ numofnews }} news</p>
+<br>
+
+
+<form method="GET" action="{% url 'home:search' %}">
+    <input name="q" value="{{ request.GET.q }}" placeholder="search">
+    <button type="submit">Search</button>
+</form>
+
+
+<nav>
+<p class="cat">Category:</p>
+ {% for i in category %}
+            <a class="cat" href="category/{{ i.id }}/">{{ i.name }}</a><br>
+ {% endfor %}
+</nav>
+<br>
+
+{% for user in users %}
+    <ul>
+        <li><a  href="{% url 'home:detail' user.id %}">{{ user.article }}</a></li>
+    <br>
+    </ul>
+{% endfor %}
+<nav aria-label="Page navigation">
+{% if users.has_other_pages %}
+  <ul class="pagination">
+    {% if users.has_previous %}
+      <li><a href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in users.paginator.page_range %}
+      {% if users.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if users.has_next %}
+      <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+</nav>
+<br>
+
+</body>
+</html>

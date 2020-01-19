@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+</head>
+<body>
+{% load account %}
+{% user_display user as u %}
+
+
+<h1 >{{ news.article }}</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<p>{{ news.content}}</p>
+<br>
+<br>
+<hr>
+<p>{{ news.likes }} likes</p>
+{% if u %}
+<form method='POST' action="like/">
+    {% csrf_token %}
+    <p><input type='submit' value='Like it' /></p>
+</form>
+{% endif %}
+<br>
+<p>Was published: {{ news.pub_date }}</p>
+<p>{{ news.category }}</p>
+<p>{{ news.country }}</p>
+{% if u == 'root' %}
+    <a href="{% url 'home:edit' pk=news.pk %}"><button class="btn btn-warning">Edit</button></a>
+{% endif %}
+
+{% if u == 'root' %}
+<form method='POST' action="delete/">
+    {% csrf_token %}
+    <h1>Delete this news</h1>
+    <p><input type='submit' value='Yes' /></p>
+</form>
+{% endif %}
+<a href='../'>Cancel</a>
+</body>
+</html>
