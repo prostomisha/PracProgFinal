@@ -141,3 +141,6 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/accounts/login/'
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
+
+
